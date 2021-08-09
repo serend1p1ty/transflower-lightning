@@ -1,8 +1,15 @@
+*.mp4
+*.npy
+.DS_Store
 lightning_logs/*
+music_features
+fid_data
+res_dir*
 .idea/*
+.vscode
 inference/*.npy
 training/experiments/*
-**/*.pyc
+*.pyc
 analysis/aistplusplus_api/SMPL_MALE.pkl
 analysis/aistplusplus_api/img/*
 analysis/weight_mats/*
@@ -30,4 +37,3 @@ ones_to_check2.txt
 to_check*
 MNIST/
 models/x_transformers
-data/scripts/*
