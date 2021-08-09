@@ -150,11 +150,13 @@ class BaseOptions:
         utils.mkdirs(expr_dir)
         file_name = os.path.join(expr_dir, 'opt.txt')
         file_name_json = os.path.join(expr_dir, 'opt.json')
-        with open(file_name, 'wt') as opt_file:
-            opt_file.write(message)
-            opt_file.write('\n')
-        with open(file_name_json, 'wt') as opt_file:
-            opt_file.write(json.dumps(vars(opt)))
+        if not os.path.exists(file_name):
+            with open(file_name, 'wt') as opt_file:
+                opt_file.write(message)
+                opt_file.write('\n')
+        if not os.path.exists(file_name_json):
+            with open(file_name_json, 'wt') as opt_file:
+                opt_file.write(json.dumps(vars(opt)))
 
     def parse(self, parse_args=None):
 

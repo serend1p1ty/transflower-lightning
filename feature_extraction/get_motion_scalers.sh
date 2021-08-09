@@ -1,5 +1,6 @@
 
 folder=$1
+expname=$2
 py=python3
 #n=$(nproc)
 n=6
@@ -20,10 +21,10 @@ param=expmap
 #param=position
 
 #mpirun -n $n $py feature_extraction/process_motions.py $@ --param ${param} --fps $fps --do_mirror
-mpirun -n 1 $py feature_extraction/extract_transform.py $1 --feature_name expmap_scaled_20.generated --transforms 2moments
-mpirun -n 1 $py feature_extraction/extract_transform.py $1 --feature_name expmap_scaled_20.generated --transforms 2moments_ext
-#mpirun -n 1 $py feature_extraction/extract_transform.py $1 --feature_name bvh_expmap_cr --transforms 2moments
-#mpirun -n 1 $py feature_extraction/extract_transform.py $1 --feature_name bvh_expmap_cr --transforms 2moments_ext
+mpirun -n 1 $py feature_extraction/extract_transform.py $folder/$expname --feature_name expmap_scaled_20.generated --transforms 2moments
+mpirun -n 1 $py feature_extraction/extract_transform.py $folder/$expname --feature_name expmap_scaled_20.generated --transforms 2moments_ext
+mpirun -n 1 $py feature_extraction/extract_transform.py $folder/ground_truth --feature_name bvh_expmap_cr --transforms 2moments
+mpirun -n 1 $py feature_extraction/extract_transform.py $folder/ground_truth --feature_name bvh_expmap_cr --transforms 2moments_ext
 #mpirun -n $n $py feature_extraction/apply_transforms.py $@ --feature_name bvh_${param} --transform_name scaler --new_feature_name ${param}_scaled_${fps}
 #cp $1/motion_expmap_data_pipe.sav $1/motion_${param}_scaled_${fps}_data_pipe.sav
 

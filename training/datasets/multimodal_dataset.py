@@ -22,6 +22,15 @@ def find_example_idx(n, cum_sums, idx = 0):
 class MultimodalDataset(BaseDataset):
 
     def __init__(self, opt, split="train"):
+        """
+        The multimodal dataset will be processed here by the following steps:
+        1. Check the input and output seqs must >= min_length (offset + length).
+        2. Get the shortest length among input and output seqs.
+            Give warning if the difference between seqs is too large.
+        3. Reduce the input and output seqs to shortest length.
+        4. Probabilistic sampling: the sample with more possible init frames will be more likely to be selected.
+            Possible init frames = total frames - min_length
+        """
         super().__init__()
         self.opt = opt
         data_path = Path(opt.data_dir)
@@ -30,7 +39,8 @@ class MultimodalDataset(BaseDataset):
 
         print(opt.base_filenames_file)
         if split == "train":
-            temp_base_filenames = [x[:-1] for x in open(data_path.joinpath(opt.base_filenames_file), "r").readlines()]
+            # temp_base_filenames = [x[:-1] for x in open(data_path.joinpath(opt.base_filenames_file), "r").readlines()]
+            temp_base_filenames = [x[:-1] for x in open(opt.base_filenames_file).readlines()]
         else:
             temp_base_filenames = [x[:-1] for x in open(data_path.joinpath("base_filenames_"+split+".txt"), "r").readlines()]
         if opt.num_train_samples > 0:
@@ -167,6 +177,8 @@ class MultimodalDataset(BaseDataset):
             if fix_lengths:
                 shortest_length = 99999999999
                 first_match = True
+                # get the shortest length among input and output seqs
+                # give warning if the difference between seqs is too large.
                 for mod in input_mods+output_mods:
                     if fix_length_types_dict[mod] == "single": continue
                     length = self.features[mod][base_filename].shape[0]
@@ -281,6 +293,12 @@ class MultimodalDataset(BaseDataset):
             return torch.tensor(yy).long().unsqueeze(1)
 
     def __getitem__(self, item):
+        # Assume:
+        # 1. N is the number of samples.
+        # 2. M is the sum of the possible init frames of all samples.
+        # `item` is a random index in [0, M - 1]
+        # `find_example_idx` help to convert `item` to sample index in [0, N - 1]
+        # This implement a probabilistic sampling: the sample with more possible init frames will be more likely to be selected.
         idx = find_example_idx(item, self.frame_cum_sums)
         base_filename = self.base_filenames[idx]
 

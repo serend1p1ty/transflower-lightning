@@ -15,6 +15,7 @@ import pickle
 #%% Default skeleton
 
 p = BVHParser()
+# load bvh file to MocapData
 default_skel = p.parse("analysis/mixamo.bvh")
 #%%
 
@@ -24,10 +25,12 @@ default_skel = p.parse("analysis/mixamo.bvh")
 #     offs = np.array(default_skel.skeleton[joint]['offsets'])*scale
 #     default_skel.skeleton[joint]['offsets'] = offs.tolist()
 bvh2expmap = MocapParameterizer('expmap')
+# Convert the MocapData.values from Euler to ExpMap, i.e., Xrotation/Yrotation/Zrotation->alpha/beta/gamma
 default_exp_map_data = bvh2expmap.fit_transform([default_skel])
 unity_joints_vals = default_exp_map_data[0].values.columns
 
 npfier = Numpyfier()
+# remember the MocapData.values.columns
 npfier.fit_transform(default_exp_map_data)
 
 def angles2smplbvh(out_data, dest_dir, filename, framerate):
@@ -81,6 +84,7 @@ def convert_smpl(filepath, dest_dir, result_filename, framerate):
         # "R_Hand": "RightHand",
     }
 
+    # map smpl joints to unity joints
     out_data = np.zeros((1, smpl_angs.shape[0], len(unity_joints)*3 + 3))
     poss = np.zeros((smpl_angs.shape[0], 3))
     for smpl_joint, unity_joint in smpl_joints_to_unity_joints.items():

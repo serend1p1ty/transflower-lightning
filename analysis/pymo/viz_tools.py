@@ -124,9 +124,9 @@ def sketch_move(mocap_track, data=None, ax=None, figsize=(16,8)):
                 
                 ax.plot([parent_x, child_x], [parent_y, child_y], '-', lw=1, color='gray', alpha=frame_alpha)
 
-def render_mp4(mocap_track, filename, data=None, ax=None, axis_scale=50, elev=45, azim=45):
+def render_mp4(mocap_track, filename, data=None, ax=None, axis_scale=50, elev=45, azim=45, scale=1):
     if ax is None:
-        fig = plt.figure(figsize=(10,10))
+        fig = plt.figure(figsize=(10.8,10.8))
         ax = fig.add_subplot(111, projection='3d')
         ax.set_xlim3d(-axis_scale, axis_scale)
         ax.set_zlim3d( 0, axis_scale)
@@ -161,16 +161,16 @@ def render_mp4(mocap_track, filename, data=None, ax=None, axis_scale=50, elev=45
         for joint in mocap_track.skeleton.keys():
             children_to_draw = [c for c in mocap_track.skeleton[joint]['children']]
             
-            parent_x = data['%s_Xposition'%joint][frame]
-            parent_y = data['%s_Yposition'%joint][frame]
-            parent_z = data['%s_Zposition'%joint][frame]
+            parent_x = data['%s_Xposition'%joint][frame] * scale
+            parent_y = data['%s_Yposition'%joint][frame] * scale
+            parent_z = data['%s_Zposition'%joint][frame] * scale
             
             #frame_alpha = frame/data.shape[0]
             
             for c in children_to_draw:
-                child_x = data['%s_Xposition'%c][frame]
-                child_y = data['%s_Yposition'%c][frame]
-                child_z = data['%s_Zposition'%c][frame]
+                child_x = data['%s_Xposition'%c][frame] * scale
+                child_y = data['%s_Yposition'%c][frame] * scale
+                child_z = data['%s_Zposition'%c][frame] * scale
                 
                 lines[0][j].set_data(np.array([[child_x, parent_x],[-child_z,-parent_z]]))
                 lines[0][j].set_3d_properties(np.array([ child_y,parent_y]))

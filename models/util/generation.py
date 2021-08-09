@@ -3,6 +3,22 @@ import torch
 
 #TODO: implement option to include the conditioning bit of input in the output
 def autoregressive_generation_multimodal(features, model, autoreg_mods=[], teacher_forcing=False, ground_truth=False):
+    """
+    A specified example:
+    Input audio_seq (length of 1200)
+    Input motion_seq (original length of 698, reduce to length of 120)
+    audio_window = audio_seq[:140]
+    motion_window = motion_seq[:120]
+    Loop:
+        1. audio_window + motion_window --> the next motion
+                    [*********]***********
+                    [++++++]
+        2. Remove the motion_window[0], and append the predicted next motion to motion_window.
+            Shift the audio_window.
+                    *[*********]**********
+                    +[++++++]
+    The number of total predicted motions is 1200 - 140 = 1060
+    """
     inputs_ = []
     for i,mod in enumerate(model.input_mods):
         input_ = features["in_"+mod]

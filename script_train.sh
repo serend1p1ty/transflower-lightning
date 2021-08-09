@@ -7,7 +7,7 @@ export XRT_WORKERS="localservice:0;grpc://localhost:40934"
 export XRT_DEVICE_MAP="CPU:0;/job:localservice/replica:0/task:0/device:XLA_CPU:0|GPU:0;/job:localservice/replica:0/task:0/device:XLA_GPU:0"
 #export PYTHONPATH=$SCRATCH/:${PYTHONPATH}
 #export PYTHONPATH=/gpfsscratch/rech/imi/usc19dv/lib/python3.7/site-packages:${PYTHONPATH}
-module load pytorch-gpu/py3/1.8.0
+# module load pytorch-gpu/py3/1.8.0
 
 py=python3
 
@@ -20,8 +20,8 @@ exp=$1
 #hparams_file=aistpp_60hz/${exp}
 
 ####aistpp_20hz
-#data_dir=${root_dir}/aistpp_20hz
-#hparams_file=aistpp_20hz/${exp}
+# data_dir=${root_dir}/aistpp_20hz
+# hparams_file=aistpp_20hz/${exp}
 
 ####moglow_pos
 #data_dir=${root_dir}/moglow_pos
@@ -30,16 +30,16 @@ exp=$1
 ####dance_combined
 #data_dir=${root_dir}/dance_combined
 #data_dir=${root_dir}/dance_combined2
-data_dir=${root_dir}/dance_combined3
+# data_dir=${root_dir}/dance_combined3
 hparams_file=dance_combined/${exp}
 
 echo $exp
 #echo $RANK
 #echo $LOCAL_RANK
-echo $SLURM_PROCID
-export LOCAL_RANK=$SLURM_LOCALID
+# echo $SLURM_PROCID
+# export LOCAL_RANK=$SLURM_LOCALID
 
-$py training/train.py --data_dir=${data_dir} \
+$py training/train.py \
     --max_epochs=1000\
     --hparams_file=training/hparams/${hparams_file}.yaml \
     --experiment_name=$exp\
@@ -80,6 +80,6 @@ $py training/train.py --data_dir=${data_dir} \
     #--output_lengths="3" \
     #--scales="[[16,0]]" \
     #--residual_scales="[[16,0]]"
-#    --glow_norm_layer="actnorm" \
+    #--glow_norm_layer="actnorm" \
     #--use_pos_emb_output \
-#    --tpu_cores=8 \
+    #--tpu_cores=8 \

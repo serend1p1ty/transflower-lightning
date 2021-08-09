@@ -73,10 +73,10 @@ if __name__ == '__main__':
     print(latest_checkpoint)
     checkpoint_dir = Path(latest_checkpoint).parent.parent.absolute()
     # exp_opt = json.loads(open("training/experiments/"+args.experiment_name+"/opt.json","r").read())
-    exp_opt = yaml.load(open(str(checkpoint_dir)+"/hparams.yaml","r").read())
-    opt = vars(TrainOptions().parse(parse_args=["--model", exp_opt["model"]]))
+    # exp_opt = yaml.load(open(str(checkpoint_dir)+"/hparams.yaml","r").read())
+    opt = vars(TrainOptions().parse(parse_args=["--hparams_file", str(checkpoint_dir)+"/hparams.yaml"]))
     print(opt)
-    opt.update(exp_opt)
+    # opt.update(exp_opt)
     # opt["cond_concat_dims"] = True
     # opt["bn_momentum"] = 0.0
     opt["batch_size"] = 1
