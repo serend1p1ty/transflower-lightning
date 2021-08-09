@@ -10,7 +10,6 @@ joblib
 smplx
 transforms3d
 x-transformers
-madmom
 ftfy
 axial_positional_embedding
 einops
